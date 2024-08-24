@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <input type="text" id="title" placeholder="Todo title"></input> <br /><br />
+    <input type="text" id="description" placeholder="Todo description"></input> <br /><br />
+    <button onclick="addTodo()">Add todo</button>
+    <div id="container">
+
+    </div>
+
+    <script>
+        let globalId = 1;
+
+        function markAsDone(todoId) {
+        const parent = document.getElementById(todoId);
+        parent.children[2].innerHTML = "Done!"
+        }
+
+        function createChild(title, description, id) {
+        const child = document.createElement("div");
+        const firstGrandParent = document.createElement("div");
+        firstGrandParent.innerHTML = title;
+        const secondGrandParent = document.createElement("div");
+        secondGrandParent.innerHTML = description;
+        const thirdGrandParent = document.createElement("button");
+        thirdGrandParent.innerHTML = "Mark as done";
+        thirdGrandParent.setAttribute("onclick", `markAsDone(${id})`);
+        child.appendChild(firstGrandParent);
+        child.appendChild(secondGrandParent);
+        child.appendChild(thirdGrandParent)
+        child.setAttribute("id", id);
+        return child;
+        }
+
+        // Let say you already have states of the application, Your task is to
+        // render states at the frontend
+        
+        // Provided: States will always be an array
+        // Every element of state would have a "title", "description" & "id"
+        function updateDomAccToState(state) {
+
+            // Clear the things that already rendered
+            const parent = document.getElementById("container");
+            parent.innerHTML = "";
+
+            for(let i = 0; i < state.length; i++) {
+
+                // Create new child
+                const child = createChild(state[i].title, state[i].description, state[i].id);
+
+                // Append the new child you created
+                parent.appendChild(child);
+            }
+        }
+
+        // Keep on the updating the page to get the updated content on the screen.
+        window.setInterval(async function() {
+            const res = await fetch("https://sum-server.100xdevs.com/todos")
+            const json = await res.json();
+            updateDomAccToState(json.todos);
+        }, 5000)
+    </script>
+</body>
+
+</html>
