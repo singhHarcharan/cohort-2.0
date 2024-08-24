@@ -1,0 +1,33 @@
+<html>
+    <script>
+        // As, oninput = function(), calls backend everytimes when the input changes
+        // to avoid this, we use debounce 
+        // i.e. If it is called first time, it waits for given time,
+        // If you write nothing in the input, only then it will send request to backend again.
+        let timeout;
+        function debouncedPopulateDiv() {
+
+            // If we called function again before 1 sec, clear the old clock 
+            clearTimeout(timeout);
+
+            // start the new clock
+            timeout = setTimeout(function() {
+                populateDiv()
+            }, 1000);        // it will add delay of 100ms between writin & calling.
+
+        }
+
+        function populateDiv() {
+            const a = document.getElementById("firstNumber").value;
+            const b = document.getElementById("secondNumber").value;
+            const element = document.getElementById("finalSum");
+            element.innerHTML = parseInt(a) + parseInt(b);
+        }
+    </script>
+    <body>
+        <input oninput = "populateDiv()" id = "firstNumber" type="text" placeholder="First Number"><br></br>
+        <input oninput = "populateDiv()" id = "secondNumber" type="text" placeholder="Second Number"><br></br>
+        <br></br>
+        <div id = "finalSum"></div>
+    </body>
+</html>
